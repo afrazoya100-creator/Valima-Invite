@@ -1,0 +1,832 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#063d30">
+
+<title>Hannan Shariff & Afra Zoya | Valima</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --green: #063d30;
+  --deep: #021e19;
+  --gold: #d9b66f;
+  --cream: #fff8e9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--deep);
+  color: var(--cream);
+  font-family: 'Cormorant Garamond', serif;
+  text-align: center;
+}
+
+body.locked {
+  overflow: hidden;
+}
+
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* OPENING SCREEN */
+
+#opening {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, #17654c 0%, #063d30 45%, #021e19 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.2s ease, visibility 1.2s ease;
+}
+
+#opening.gone {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.arch {
+  position: absolute;
+  inset: 3.5%;
+  border: 1px solid rgba(217,182,111,.7);
+  border-radius: 48% 48% 0 0 / 28% 28% 0 0;
+  box-shadow: 0 0 35px rgba(217,182,111,.08);
+}
+
+.arch::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(217,182,111,.3);
+  border-radius: inherit;
+}
+
+.doorway {
+  position: absolute;
+  inset: 8% 7% 0;
+  display: flex;
+  perspective: 1400px;
+  overflow: hidden;
+  border: 2px solid var(--gold);
+  border-bottom: 0;
+  border-radius: 46% 46% 0 0 / 25% 25% 0 0;
+  background:
+    radial-gradient(ellipse at 50% 70%, #b18a44 0%, #17654c 28%, #021e19 78%);
+}
+
+.door {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,.12) 0,
+      rgba(0,0,0,.12) 3px,
+      transparent 3px,
+      transparent 18px
+    ),
+    linear-gradient(120deg, #0e6348, #06402f 45%, #02251c);
+  border: 2px solid #cba45b;
+  box-shadow: inset 0 0 28px rgba(0,0,0,.6);
+  transition: transform 2s cubic-bezier(.65,0,.2,1);
+  z-index: 3;
+}
+
+.door.left {
+  transform-origin: left center;
+  border-right: 3px solid var(--gold);
+}
+
+.door.right {
+  transform-origin: right center;
+  border-left: 3px solid var(--gold);
+}
+
+.door-panel {
+  position: absolute;
+  inset: 7% 9%;
+  border: 2px solid rgba(217,182,111,.9);
+  border-radius: 45% 45% 0 0 / 20% 20% 0 0;
+  box-shadow: inset 0 0 20px rgba(0,0,0,.25);
+}
+
+.door-panel::before {
+  content: "✧";
+  position: absolute;
+  top: 27%;
+  left: 0;
+  right: 0;
+  font-size: clamp(45px, 10vw, 90px);
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(217,182,111,.45);
+}
+
+.door-panel::after {
+  content: "";
+  position: absolute;
+  width: 55%;
+  height: 25%;
+  bottom: 18%;
+  left: 22.5%;
+  border: 1px solid rgba(217,182,111,.65);
+  border-radius: 50% 50% 0 0;
+}
+
+.door-handle {
+  position: absolute;
+  top: 53%;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff1bb, #c3943e 70%);
+  box-shadow: 0 0 12px rgba(217,182,111,.7);
+}
+
+.left .door-handle {
+  right: 12px;
+}
+
+.right .door-handle {
+  left: 12px;
+}
+
+#opening.open .door.left {
+  transform: rotateY(-112deg);
+}
+
+#opening.open .door.right {
+  transform: rotateY(112deg);
+}
+
+.opening-content {
+  position: relative;
+  z-index: 5;
+  width: min(90%, 450px);
+  padding: 25px 10px;
+  text-shadow: 0 2px 12px #021e19;
+}
+
+.bismillah {
+  color: var(--gold);
+  font-size: clamp(20px, 5vw, 28px);
+  margin-bottom: 28px;
+  letter-spacing: 1px;
+}
+
+.small-heading {
+  text-transform: uppercase;
+  color: #e6cd96;
+  font-size: 12px;
+  letter-spacing: 5px;
+}
+
+.opening-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(27px, 7vw, 42px);
+  font-weight: 400;
+  margin: 15px 0 28px;
+  color: var(--cream);
+}
+
+#enterBtn {
+  border: 1px solid var(--gold);
+  background: linear-gradient(120deg, #e4c984, #b58a3f);
+  color: #173b2c;
+  padding: 15px 27px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(217,182,111,.18);
+  transition: transform .3s, box-shadow .3s;
+}
+
+#enterBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(217,182,111,.35);
+}
+
+#enterBtn:disabled {
+  opacity: .65;
+  cursor: default;
+}
+
+/* MAIN INVITATION */
+
+#invitation {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.5s ease;
+}
+
+#invitation.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.hero {
+  min-height: 100svh;
+  padding: 75px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 30%, #17654c 0%, #063d30 43%, #021e19 100%);
+}
+
+.hero::before,
+.hero::after {
+  content: "✧";
+  position: absolute;
+  color: rgba(217,182,111,.55);
+  font-size: 100px;
+}
+
+.hero::before {
+  top: 12%;
+  left: 5%;
+}
+
+.hero::after {
+  right: 5%;
+  bottom: 12%;
+}
+
+.ornament {
+  width: min(240px, 65%);
+  height: 1px;
+  margin: 23px auto;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.hero h1 {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(47px, 11vw, 82px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--gold);
+  margin: 20px 0;
+}
+
+.ampersand {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 33px;
+  color: var(--cream);
+  margin: 3px 0;
+}
+
+.subtitle {
+  font-size: 18px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #f0dcae;
+}
+
+.section {
+  padding: 70px 23px;
+  max-width: 760px;
+  margin: auto;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 6vw, 36px);
+  font-weight: 400;
+  color: var(--gold);
+  margin: 0 0 25px;
+}
+
+.body-copy {
+  font-size: 21px;
+  line-height: 1.65;
+  color: #f6edda;
+}
+
+.family-card {
+  max-width: 570px;
+  margin: 30px auto;
+  padding: 30px 20px;
+  border: 1px solid rgba(217,182,111,.6);
+  background: linear-gradient(145deg, rgba(15,91,66,.4), rgba(2,30,25,.6));
+}
+
+.family-card h3 {
+  color: var(--gold);
+  font-family: 'Playfair Display', serif;
+  font-size: 25px;
+  font-weight: 400;
+  margin: 0 0 10px;
+}
+
+.family-card p {
+  font-size: 19px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.parent-divider {
+  margin: 22px auto;
+  color: var(--gold);
+  font-size: 23px;
+}
+
+.event-details {
+  margin-top: 35px;
+  padding: 28px 20px;
+  border-top: 1px solid rgba(217,182,111,.6);
+  border-bottom: 1px solid rgba(217,182,111,.6);
+}
+
+.detail {
+  margin: 18px 0;
+}
+
+.detail-label {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.detail-value {
+  font-size: 23px;
+  margin-top: 7px;
+  line-height: 1.4;
+}
+
+.gold-button {
+  display: inline-block;
+  text-decoration: none;
+  margin: 12px 6px;
+  padding: 12px 20px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-size: 17px;
+  transition: background .3s, color .3s;
+}
+
+.gold-button:hover {
+  background: var(--gold);
+  color: var(--deep);
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 28px 0;
+}
+
+.time-box {
+  border: 1px solid rgba(217,182,111,.6);
+  padding: 15px 12px;
+  min-width: 75px;
+}
+
+.time-box strong {
+  display: block;
+  color: var(--gold);
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.time-box span {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dua {
+  font-size: 23px;
+  line-height: 1.8;
+  color: #f5e4bc;
+  font-style: italic;
+}
+
+.footer {
+  padding: 30px 20px 45px;
+  color: #c8b995;
+  font-size: 16px;
+  background: #021711;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body class="locked">
+
+<!-- ROYAL PALACE DOOR OPENING -->
+
+<div id="opening">
+  <div class="arch"></div>
+
+  <div class="doorway">
+    <div class="door left">
+      <div class="door-panel"></div>
+      <span class="door-handle"></span>
+    </div>
+
+    <div class="door right">
+      <div class="door-panel"></div>
+      <span class="door-handle"></span>
+    </div>
+  </div>
+
+  <div class="opening-content">
+    <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <div class="small-heading">With gratitude to Allah</div>
+    <div class="opening-title">A Royal Evening Awaits</div>
+    <button id="enterBtn" onclick="openInvitation()">
+      Enter the Celebration ✧
+    </button>
+  </div>
+</div>
+
+<!-- INVITATION CONTENT -->
+
+<main id="invitation">
+
+  <section class="hero">
+    <div class="reveal">
+      <div class="small-heading">In the name of Allah</div>
+      <div class="ornament"></div>
+      <p class="subtitle">The Valima Celebration</p>
+
+      <h1>
+        Hannan Shariff
+        <span class="ampersand">&</span>
+        Afra Zoya
+      </h1>
+
+      <div class="ornament"></div>
+      <p class="body-copy">
+        Two hearts, one beautiful journey,<br>
+        and a lifetime of blessings to come.
+      </p>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <h2 class="section-title">With the Blessings of Allah</h2>
+
+    <p class="body-copy">
+      With grateful hearts and immense joy,
+      we invite you to join us in celebrating
+      the Valima of
+    </p>
+
+    <div class="family-card">
+      <h3>Hannan Shariff</h3>
+      <p>Beloved son of<br>
+      Mr. and Mrs. Mansoor Shariff</p>
+
+      <div class="parent-divider">✧</div>
+
+      <h3>Afra Zoya</h3>
+      <p>Beloved daughter of<br>
+      Mr. Syed Hafeez Ur Rahman<br>
+      (Urf Mubersheer)<br>
+      and Mrs. Amina Samrin</p>
+    </div>
+
+    <p class="body-copy">
+      Your presence and duas will make
+      this blessed occasion even more special.
+    </p>
+  </section>
+
+  <section class="section reveal">
+    <h2 class="section-title">The Celebration</h2>
+
+    <div class="ornament"></div>
+
+    <!-- REPLACE THE DETAILS BELOW -->
+
+    <div class="event-details">
+
+      <div class="detail">
+        <div class="detail-label">Date</div>
+        <div class="detail-value" id="eventDate">
+          Date to be announced
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Time</div>
+        <div class="detail-value">
+          Time to be announced
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-label">Venue</div>
+        <div class="detail-value">
+          Venue to be announced
+        </div>
+      </div>
+
+      <a class="gold-button"
+         id="mapButton"
+         href="#"
+         target="_blank"
+         rel="noopener">
+        View Location ↗
+      </a>
+
+      <a class="gold-button"
+         id="calendarButton"
+         href="#"
+         target="_blank"
+         rel="noopener">
+        Add to Calendar
+      </a>
+
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <h2 class="section-title">Until Our Special Day</h2>
+
+    <p class="body-copy">
+      Counting down to a beautiful gathering
+      filled with love and blessings.
+    </p>
+
+    <div class="countdown">
+      <div class="time-box">
+        <strong id="days">--</strong>
+        <span>Days</span>
+      </div>
+      <div class="time-box">
+        <strong id="hours">--</strong>
+        <span>Hours</span>
+      </div>
+      <div class="time-box">
+        <strong id="minutes">--</strong>
+        <span>Minutes</span>
+      </div>
+      <div class="time-box">
+        <strong id="seconds">--</strong>
+        <span>Seconds</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <div class="ornament"></div>
+    <h2 class="section-title">A Dua for Our Journey</h2>
+
+    <p class="dua">
+      May Allah bless our union,<br>
+      fill our home with peace and mercy,<br>
+      strengthen our love through every season,<br>
+      and grant us a lifetime of barakah.
+      Ameen.
+    </p>
+
+    <div class="ornament"></div>
+
+    <p class="body-copy">
+      We look forward to celebrating with you.
+    </p>
+  </section>
+
+  <footer class="footer">
+    Made with love and duas 🤍<br>
+    Hannan Shariff & Afra Zoya
+  </footer>
+
+</main>
+
+<script>
+const opening = document.getElementById("opening");
+const invitation = document.getElementById("invitation");
+const enterBtn = document.getElementById("enterBtn");
+
+let opened = false;
+
+/*
+  DOOR SOUND EFFECT
+  Created in the browser, so no sound file is required.
+*/
+
+function playDoorSound() {
+  try {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    const ctx = new AudioContextClass();
+
+    ctx.resume().then(() => {
+      const start = ctx.currentTime;
+
+      // Low wooden creak
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      oscillator.type = "sawtooth";
+      oscillator.frequency.setValueAtTime(105, start);
+      oscillator.frequency.exponentialRampToValueAtTime(
+        47, start + 1.4
+      );
+
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.linearRampToValueAtTime(0.10, start + 0.12);
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001, start + 1.6
+      );
+
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+
+      oscillator.start(start);
+      oscillator.stop(start + 1.7);
+
+      // Soft wooden thud as the doors begin opening
+      const thud = ctx.createOscillator();
+      const thudGain = ctx.createGain();
+
+      thud.type = "sine";
+      thud.frequency.setValueAtTime(75, start + 1.5);
+      thud.frequency.exponentialRampToValueAtTime(
+        35, start + 1.9
+      );
+
+      thudGain.gain.setValueAtTime(0.0001, start);
+      thudGain.gain.setValueAtTime(0.16, start + 1.5);
+      thudGain.gain.exponentialRampToValueAtTime(
+        0.0001, start + 2
+      );
+
+      thud.connect(thudGain);
+      thudGain.connect(ctx.destination);
+
+      thud.start(start + 1.5);
+      thud.stop(start + 2.1);
+
+      setTimeout(() => ctx.close(), 2500);
+    });
+  } catch (error) {
+    console.log("Audio is unavailable in this browser.");
+  }
+}
+
+/* OPEN THE PALACE DOORS */
+
+function openInvitation() {
+  if (opened) return;
+  opened = true;
+
+  enterBtn.disabled = true;
+  playDoorSound();
+
+  opening.classList.add("open");
+
+  setTimeout(() => {
+    opening.classList.add("gone");
+    document.body.classList.remove("locked");
+    invitation.classList.add("visible");
+
+    document.querySelectorAll(".reveal").forEach((el, index) => {
+      setTimeout(() => el.classList.add("show"), index * 180);
+    });
+  }, 1800);
+}
+
+/* REVEAL SECTIONS WHILE SCROLLING */
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".section.reveal").forEach(section => {
+  observer.observe(section);
+});
+
+/*
+  EVENT SETTINGS
+
+  When your date is confirmed, update the event date below.
+  Format: YYYY-MM-DDTHH:MM:SS+05:30
+*/
+
+const eventStart = ""; // Example: 2026-12-16T19:00:00+05:30
+
+function updateCountdown() {
+  if (!eventStart) return;
+
+  const difference = new Date(eventStart).getTime() - Date.now();
+
+  if (difference <= 0) {
+    document.getElementById("days").textContent = "0";
+    document.getElementById("hours").textContent = "0";
+    document.getElementById("minutes").textContent = "0";
+    document.getElementById("seconds").textContent = "0";
+    return;
+  }
+
+  document.getElementById("days").textContent =
+    Math.floor(difference / 86400000);
+
+  document.getElementById("hours").textContent =
+    Math.floor((difference % 86400000) / 3600000);
+
+  document.getElementById("minutes").textContent =
+    Math.floor((difference % 3600000) / 60000);
+
+  document.getElementById("seconds").textContent =
+    Math.floor((difference % 60000) / 1000);
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/*
+  MAP AND CALENDAR
+
+  Add your venue's Google Maps URL and event date/time
+  when they are confirmed.
+*/
+
+const venueMapUrl = ""; // Paste your Google Maps link here
+
+if (venueMapUrl) {
+  document.getElementById("mapButton").href = venueMapUrl;
+} else {
+  document.getElementById("mapButton").style.display = "none";
+}
+
+if (eventStart) {
+  const startDate = new Date(eventStart);
+  const endDate = new Date(startDate.getTime() + 3 * 60 * 60 * 1000);
+
+  function toGoogleDate(date) {
+    return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  }
+
+  const calendarUrl =
+    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+    "&text=" + encodeURIComponent("Valima | Hannan Shariff & Afra Zoya") +
+    "&dates=" + toGoogleDate(startDate) + "/" + toGoogleDate(endDate) +
+    "&details=" + encodeURIComponent("Join us to celebrate the Valima of Hannan Shariff and Afra Zoya.") +
+    (venueMapUrl ? "&location=" + encodeURIComponent(venueMapUrl) : "");
+
+  document.getElementById("calendarButton").href = calendarUrl;
+} else {
+  document.getElementById("calendarButton").style.display = "none";
+}
+</script>
+
+</body>
+</html>
+```

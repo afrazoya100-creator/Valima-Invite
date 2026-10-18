@@ -13,16 +13,15 @@
 
 <style>
 :root {
-  --wine: #4a1020;
-  --wine-dark: #260810;
-  --burgundy: #711b32;
-  --blush: #e8b9bd;
-  --gold: #c9a568;
-  --pale-gold: #f0d9a9;
-  --ivory: #fff5e8;
-  --ink: #401322;
+  --wine: #482044;
+  --wine-dark: #1d0b20;
+  --burgundy: #632d60;
+  --blush: #e8c1d2;
+  --gold: #c58b91;
+  --pale-gold: #f3d9c9;
+  --ivory: #fff5f0;
+  --ink: #42213d;
 }
-
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
@@ -343,10 +342,15 @@ main.visible { opacity: 1; }
   place-items: center;
   text-align: center;
   position: relative;
+
   background:
-    linear-gradient(#280711a8, #3e0c1cde),
-    url('roses.PNG') center/cover,
-    radial-gradient(ellipse at center, #70253b, #260810);
+    linear-gradient(
+      rgba(35, 12, 39, 0.60),
+      rgba(35, 12, 39, 0.78)
+    ),
+    url('roses.png') center / cover no-repeat,
+    #301333;
+
   border-bottom: 1px solid var(--gold);
 }
 
@@ -411,8 +415,11 @@ main.visible { opacity: 1; }
   text-align: center;
   padding: 65px 22px;
   background:
-    radial-gradient(ellipse at center, #fffaf2 0%, #f4e3ca 80%);
-}
+  radial-gradient(
+    ellipse at center,
+    #fffaf6 0%,
+    #f5e5e5 80%
+  );
 
 .paper-section::before,
 .paper-section::after {
@@ -565,8 +572,14 @@ main.visible { opacity: 1; }
 
 .button.primary {
   color: #2d0811;
-  background: linear-gradient(135deg, #f0d8a5, #bd9657);
-}
+  background:
+  radial-gradient(
+    ellipse at center,
+    #61385f,
+    #241027 85%
+  );
+border-top: 1px solid var(--gold);
+border-bottom: 1px solid var(--gold);
 
 .button:hover {
   transform: translateY(-3px);
@@ -625,8 +638,11 @@ main.visible { opacity: 1; }
 .closing {
   padding: 65px 22px 80px;
   text-align: center;
-  background: linear-gradient(#fff5e7, #ead4b7);
-  color: #4b1725;
+  background: linear-gradient(
+  #fff6f2,
+  #ead5df
+);
+color: #42213d;
 }
 
 .closing .dua {

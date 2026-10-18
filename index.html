@@ -1,1203 +1,158 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hannan Shariff &amp; Afra Zoya | Valima</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --plum: #512b50;
-      --deep-plum: #211022;
-      --dark-plum: #180b1a;
-      --mid-plum: #74466f;
-      --rose: #d7a2b5;
-      --blush: #f0d4df;
-      --rose-gold: #c99a8c;
-      --pale-gold: #f2d8c2;
-      --ivory: #fff8f4;
-      --ink: #422541;
-      --muted: #80647b;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--ivory);
-      color: var(--ink);
-      font-family: "DM Sans", sans-serif;
-      overflow-x: hidden;
-    }
-
-    button, a {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    /* Falling petals */
-
-    #petal-layer {
-      position: fixed;
-      inset: 0;
-      z-index: 30;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .petal {
-      position: absolute;
-      top: -35px;
-      width: 13px;
-      height: 19px;
-      border-radius: 80% 10% 75% 15%;
-      opacity: 0.8;
-      animation: petalFall linear forwards;
-      box-shadow: inset -2px -2px 4px rgba(74, 25, 62, 0.13);
-    }
-
-    @keyframes petalFall {
-      0% {
-        transform: translate3d(0, -20px, 0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.85;
-      }
-      50% {
-        transform: translate3d(45px, 50vh, 0) rotate(240deg);
-      }
-      100% {
-        transform: translate3d(-35px, 110vh, 0) rotate(650deg);
-        opacity: 0;
-      }
-    }
-
-    /* Opening screen */
-
-    .door-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-      background:
-        radial-gradient(ellipse at center, rgba(116, 70, 111, 0.38), transparent 65%),
-        linear-gradient(145deg, #321934, #180b1a 72%);
-      transition: opacity 1.1s ease, visibility 1.1s ease;
-      overflow: hidden;
-    }
-
-    .door-screen::before {
-      content: "";
-      position: absolute;
-      inset: 13px;
-      border: 1px solid rgba(201, 154, 140, 0.5);
-      pointer-events: none;
-    }
-
-    .door-screen::after {
-      content: "";
-      position: absolute;
-      inset: 21px;
-      border: 1px solid rgba(242, 216, 194, 0.18);
-      pointer-events: none;
-    }
-
-    .door-screen.opened {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .opening-content {
-      position: relative;
-      z-index: 2;
-      width: min(100%, 460px);
-      text-align: center;
-    }
-
-    .bismillah {
-      color: var(--pale-gold);
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(27px, 6vw, 37px);
-      line-height: 1.5;
-      margin-bottom: 10px;
-      text-shadow: 0 0 18px rgba(201, 154, 140, 0.2);
-    }
-
-    .opening-subtitle {
-      color: var(--blush);
-      font-family: "DM Sans", sans-serif;
-      font-size: 10px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-
-    .door-frame {
-      width: min(80vw, 320px);
-      height: min(66vw, 365px);
-      min-height: 270px;
-      max-height: 365px;
-      margin: 0 auto;
-      position: relative;
-      padding: 8px;
-      border: 2px solid var(--rose-gold);
-      border-radius: 155px 155px 4px 4px;
-      background: linear-gradient(135deg, #d6a99c, #70446e 38%, #311632 78%, #c99a8c);
-      box-shadow:
-        0 0 0 5px rgba(201, 154, 140, 0.12),
-        0 0 32px rgba(215, 162, 181, 0.16),
-        0 20px 55px rgba(0, 0, 0, 0.35);
-    }
-
-    .door-inner-frame {
-      position: absolute;
-      inset: 8px;
-      border: 1px solid rgba(242, 216, 194, 0.75);
-      border-radius: 145px 145px 0 0;
-      overflow: hidden;
-      background: #2a142b;
-    }
-
-    .door-pair {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      perspective: 1000px;
-      transform-style: preserve-3d;
-    }
-
-    .door {
-      width: 50%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      background:
-        linear-gradient(90deg, rgba(0,0,0,0.22), transparent 28%, rgba(255,255,255,0.045) 50%, transparent 75%, rgba(0,0,0,0.2)),
-        linear-gradient(145deg, #80547b 0%, #512b50 35%, #321934 75%, #482248 100%);
-      border: 1px solid rgba(201, 154, 140, 0.8);
-      transition: transform 2s cubic-bezier(.7, 0, .2, 1);
-      transform-style: preserve-3d;
-    }
-
-    .door.left {
-      transform-origin: left center;
-      border-right: 1px solid var(--pale-gold);
-    }
-
-    .door.right {
-      transform-origin: right center;
-      border-left: 1px solid var(--pale-gold);
-    }
-
-    .door-screen.opening .door.left {
-      transform: rotateY(-105deg);
-    }
-
-    .door-screen.opening .door.right {
-      transform: rotateY(105deg);
-    }
-
-    .door-screen.opening .door-inner-frame {
-      overflow: visible;
-    }
-
-    .door-panel {
-      position: absolute;
-      inset: 13px 9px;
-      border: 1px solid rgba(201, 154, 140, 0.78);
-      border-radius: 100px 100px 2px 2px;
-      pointer-events: none;
-    }
-
-    .door-panel::before {
-      content: "";
-      position: absolute;
-      inset: 15px 9px;
-      border: 1px solid rgba(242, 216, 194, 0.42);
-      border-radius: 90px 90px 0 0;
-    }
-
-    .door-panel::after {
-      content: "✧";
-      position: absolute;
-      top: 38%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--pale-gold);
-      font-size: 35px;
-      text-shadow: 0 0 10px rgba(242, 216, 194, 0.3);
-    }
-
-    .door-ornament {
-      position: absolute;
-      left: 50%;
-      top: 53%;
-      transform: translateX(-50%);
-      width: 33px;
-      height: 56px;
-      border: 1px solid var(--rose-gold);
-      border-radius: 50% 50% 45% 45%;
-      opacity: 0.8;
-    }
-
-    .door-handle {
-      position: absolute;
-      top: 59%;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff1d5, #c99a8c 60%, #7c4d51);
-      box-shadow: 0 0 8px rgba(242, 216, 194, 0.4);
-    }
-
-    .door.left .door-handle {
-      right: 12px;
-    }
-
-    .door.right .door-handle {
-      left: 12px;
-    }
-
-    .door-seal {
-      position: absolute;
-      z-index: 3;
-      top: 55%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 52px;
-      height: 52px;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      color: #f9e8d8;
-      font-size: 23px;
-      background: radial-gradient(circle at 30% 25%, #c58a9f, #783b65 70%, #482044);
-      border: 2px solid var(--rose-gold);
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
-      transition: opacity .5s ease, transform .5s ease;
-    }
-
-    .door-screen.opening .door-seal {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.4);
-    }
-
-    .open-button {
-      margin-top: 25px;
-      padding: 13px 28px;
-      border: 1px solid var(--rose-gold);
-      color: var(--ivory);
-      background: linear-gradient(120deg, #70466d, #492449);
-      letter-spacing: 2px;
-      font-size: 10px;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 5px 22px rgba(0, 0, 0, 0.22);
-      transition: background .3s, transform .3s;
-    }
-
-    .open-button:hover {
-      background: linear-gradient(120deg, #94688c, #70466d);
-      transform: translateY(-2px);
-    }
-
-    .open-hint {
-      margin-top: 13px;
-      color: #d9b9cf;
-      font-size: 10px;
-      letter-spacing: 1.5px;
-    }
-
-    .door-screen.opening .open-button,
-    .door-screen.opening .open-hint {
-      opacity: 0;
-      transition: opacity .3s;
-    }
-
-    /* Main invitation hero */
-
-    .hero {
-      min-height: 80vh;
-      padding: 90px 20px 80px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      position: relative;
-      isolation: isolate;
-      background:
-        linear-gradient(rgba(35, 12, 39, 0.45), rgba(35, 12, 39, 0.79)),
-        url("roses.png") center / cover no-repeat,
-        #301333;
-      border-bottom: 1px solid var(--rose-gold);
-      color: var(--ivory);
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 15px;
-      border: 1px solid rgba(242, 216, 194, 0.55);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .hero-content {
-      max-width: 760px;
-      position: relative;
-      z-index: 1;
-      animation: riseIn 1.2s ease both;
-    }
-
-    .hero-bismillah {
-      color: var(--pale-gold);
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(27px, 5vw, 35px);
-      margin-bottom: 30px;
-    }
-
-    .hero-kicker {
-      font-size: 10px;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--blush);
-      margin-bottom: 24px;
-    }
-
-    .hero h1 {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(36px, 8vw, 70px);
-      font-weight: 400;
-      line-height: 1.2;
-      color: var(--ivory);
-      text-shadow: 0 3px 22px rgba(0, 0, 0, 0.25);
-    }
-
-    .hero-ampersand {
-      display: block;
-      color: var(--pale-gold);
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(35px, 6vw, 48px);
-      font-style: italic;
-      margin: 7px 0;
-    }
-
-    .hero-rule {
-      width: 95px;
-      height: 1px;
-      background: var(--rose-gold);
-      margin: 27px auto;
-      position: relative;
-    }
-
-    .hero-rule::after {
-      content: "✧";
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      padding: 0 10px;
-      background: #442143;
-      color: var(--pale-gold);
-      font-size: 17px;
-    }
-
-    .hero-subtitle {
-      color: #f4dce8;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(20px, 4vw, 27px);
-      font-style: italic;
-      letter-spacing: 1px;
-    }
-
-    .scroll-cue {
-      display: inline-block;
-      margin-top: 40px;
-      color: var(--pale-gold);
-      text-decoration: none;
-      font-size: 10px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-
-    /* Invitation paper */
-
-    .paper-section {
-      position: relative;
-      padding: 85px 20px;
-      background: radial-gradient(ellipse at center, #fffaf6 0%, #f5e5e5 80%);
-    }
-
-    .invitation-card {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: clamp(30px, 7vw, 65px);
-      position: relative;
-      text-align: center;
-      background: rgba(255, 251, 247, 0.92);
-      border: 1px solid var(--rose-gold);
-      box-shadow: 0 15px 50px rgba(70, 34, 67, 0.09);
-    }
-
-    .invitation-card::before {
-      content: "";
-      position: absolute;
-      inset: 8px;
-      border: 1px solid rgba(201, 154, 140, 0.48);
-      pointer-events: none;
-    }
-
-    .card-flower {
-      color: var(--rose-gold);
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    .small-heading {
-      color: var(--mid-plum);
-      font-size: 10px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-bottom: 23px;
-    }
-
-    .invitation-intro {
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(20px, 4vw, 26px);
-      line-height: 1.65;
-      color: var(--ink);
-    }
-
-    .invitation-intro strong {
-      color: var(--plum);
-      font-weight: 600;
-    }
-
-    .valima-label {
-      color: var(--rose-gold);
-      font-family: "Playfair Display", serif;
-      font-size: clamp(25px, 5vw, 35px);
-      font-style: italic;
-      margin: 24px 0;
-    }
-
-    .couple-names {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(27px, 6vw, 43px);
-      line-height: 1.45;
-      color: var(--plum);
-    }
-
-    .couple-and {
-      display: block;
-      font-family: "Cormorant Garamond", serif;
-      font-size: 28px;
-      font-style: italic;
-      color: var(--rose-gold);
-    }
-
-    .card-divider {
-      width: 65px;
-      height: 1px;
-      margin: 28px auto;
-      background: var(--rose-gold);
-    }
-
-    .family-line {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 21px;
-      line-height: 1.7;
-      color: var(--ink);
-    }
-
-    .family-label {
-      font-size: 9px;
-      letter-spacing: 3px;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin: 25px 0 7px;
-    }
-
-    /* Details */
-
-    .details-section {
-      padding: 85px 20px;
-      background: radial-gradient(ellipse at center, #61385f, #241027 85%);
-      border-top: 1px solid var(--rose-gold);
-      border-bottom: 1px solid var(--rose-gold);
-      color: var(--ivory);
-      text-align: center;
-    }
-
-    .details-heading {
-      font-family: "Playfair Display", serif;
-      font-weight: 400;
-      font-size: clamp(30px, 6vw, 43px);
-      color: var(--ivory);
-      margin-bottom: 12px;
-    }
-
-    .details-subheading {
-      font-family: "Cormorant Garamond", serif;
-      font-size: 21px;
-      font-style: italic;
-      color: var(--blush);
-      margin-bottom: 40px;
-    }
-
-    .details-grid {
-      max-width: 850px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    .detail {
-      padding: 27px 15px;
-      border: 1px solid rgba(201, 154, 140, 0.65);
-      background: rgba(255, 255, 255, 0.035);
-    }
-
-    .detail-icon {
-      color: var(--pale-gold);
-      font-size: 25px;
-      margin-bottom: 14px;
-    }
-
-    .detail-label {
-      color: var(--blush);
-      font-size: 9px;
-      letter-spacing: 3px;
-      margin-bottom: 13px;
-    }
-
-    .detail-value {
-      font-family: "Cormorant Garamond", serif;
-      color: var(--ivory);
-      font-size: 22px;
-      line-height: 1.55;
-    }
-
-    .hijri-date {
-      color: var(--pale-gold);
-      font-size: 17px;
-      margin-top: 7px;
-    }
-
-    .venue-address {
-      margin-top: 8px;
-      color: #f2dce9;
-      font-family: "DM Sans", sans-serif;
-      font-size: 12px;
-      line-height: 1.8;
-    }
-
-    .map-button,
-    .calendar-button {
-      display: inline-block;
-      margin: 30px 6px 0;
-      padding: 13px 20px;
-      border: 1px solid var(--rose-gold);
-      color: var(--ivory);
-      text-decoration: none;
-      font-size: 10px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition: background .25s, color .25s;
-    }
-
-    .map-button:hover,
-    .calendar-button:hover {
-      background: var(--pale-gold);
-      color: var(--deep-plum);
-    }
-
-    /* Countdown */
-
-    .countdown-section {
-      text-align: center;
-      padding: 70px 20px;
-      background: #fff8f4;
-    }
-
-    .countdown-title {
-      font-family: "Playfair Display", serif;
-      font-weight: 400;
-      font-size: clamp(27px, 5vw, 36px);
-      color: var(--plum);
-      margin-bottom: 12px;
-    }
-
-    .countdown-caption {
-      color: var(--muted);
-      font-family: "Cormorant Garamond", serif;
-      font-size: 20px;
-      font-style: italic;
-      margin-bottom: 28px;
-    }
-
-    .countdown {
-      display: flex;
-      justify-content: center;
-      gap: clamp(12px, 4vw, 35px);
-      flex-wrap: wrap;
-    }
-
-    .count-item {
-      min-width: 65px;
-    }
-
-    .count-number {
-      display: block;
-      font-family: "Playfair Display", serif;
-      font-size: clamp(31px, 6vw, 43px);
-      color: var(--plum);
-    }
-
-    .count-label {
-      display: block;
-      margin-top: 5px;
-      color: var(--rose-gold);
-      font-size: 9px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-
-    /* Closing */
-
-    .closing {
-      padding: 80px 20px;
-      text-align: center;
-      background: linear-gradient(#fff6f2, #ead5df);
-      color: #42213d;
-      border-top: 1px solid rgba(201, 154, 140, 0.65);
-    }
-
-    .closing-ornament {
-      color: var(--rose-gold);
-      font-size: 28px;
-      margin-bottom: 22px;
-    }
-
-    .dua {
-      max-width: 650px;
-      margin: 0 auto;
-      font-family: "Cormorant Garamond", serif;
-      font-size: clamp(21px, 4vw, 28px);
-      line-height: 1.7;
-      font-style: italic;
-    }
-
-    .dua-translation {
-      max-width: 570px;
-      margin: 20px auto 0;
-      color: #75566e;
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    .closing-names {
-      margin-top: 30px;
-      color: var(--plum);
-      font-family: "Playfair Display", serif;
-      font-size: 23px;
-    }
-
-    .footer {
-      padding: 20px;
-      text-align: center;
-      background: var(--deep-plum);
-      color: var(--blush);
-      font-size: 9px;
-      letter-spacing: 2px;
-    }
-
-    /* Music control */
-
-    .music-button {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 50;
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      border: 1px solid var(--rose-gold);
-      background: rgba(43, 20, 44, 0.93);
-      color: var(--pale-gold);
-      font-size: 19px;
-      cursor: pointer;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.18);
-    }
-
-    .music-button:hover {
-      background: var(--mid-plum);
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(22px);
-      transition: opacity .9s ease, transform .9s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @keyframes riseIn {
-      from {
-        opacity: 0;
-        transform: translateY(22px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 650px) {
-      .hero {
-        min-height: 74vh;
-        padding: 75px 22px;
-        background-position: center;
-      }
-
-      .paper-section,
-      .details-section {
-        padding: 65px 16px;
-      }
-
-      .details-grid {
-        grid-template-columns: 1fr;
-        max-width: 380px;
-      }
-
-      .detail {
-        padding: 23px 14px;
-      }
-
-      .invitation-card {
-        padding: 38px 23px;
-      }
-
-      .map-button,
-      .calendar-button {
-        display: block;
-        max-width: 250px;
-        margin: 14px auto 0;
-      }
-
-      .door-frame {
-        width: min(78vw, 300px);
-        height: min(92vw, 355px);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div id="petal-layer" aria-hidden="true"></div>
-
-  <!-- Opening doors -->
-  <section class="door-screen" id="doorScreen" aria-label="Open the Valima invitation">
-    <div class="opening-content">
-      <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-      <div class="opening-subtitle">In the name of Allah, the Most Merciful</div>
-
-      <div class="door-frame">
-        <div class="door-inner-frame">
-          <div class="door-pair">
-            <div class="door left">
-              <div class="door-panel"></div>
-              <div class="door-ornament"></div>
-              <div class="door-handle"></div>
-            </div>
-            <div class="door right">
-              <div class="door-panel"></div>
-              <div class="door-ornament"></div>
-              <div class="door-handle"></div>
-            </div>
-          </div>
-          <div class="door-seal" aria-hidden="true">✧</div>
-        </div>
-      </div>
-
-      <button class="open-button" id="openButton" type="button">
-        Open Invitation
-      </button>
-      <p class="open-hint">A beautiful beginning awaits</p>
-    </div>
-  </section>
-
-  <!-- Main hero -->
-  <header class="hero" id="top">
-    <div class="hero-content">
-      <div class="hero-bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
-      <div class="hero-kicker">With gratitude to Allah</div>
-      <h1>
-        Hannan Shariff
-        <span class="hero-ampersand">&amp;</span>
-        Afra Zoya
-      </h1>
-      <div class="hero-rule"></div>
-      <a class="scroll-cue" href="#invitation">Discover the invitation ↓</a>
-    </div>
-  </header>
-
-  <!-- Invitation wording -->
-  <main>
-    <section class="paper-section" id="invitation">
-      <div class="invitation-card reveal">
-        <div class="card-flower">✧ ❀ ✧</div>
-        <p class="small-heading">You are cordially invited</p>
-
-        <p class="invitation-intro">
-          <strong>Mr. and Mrs. Mansoor Shariff</strong><br>
-          cordially invite you and your family to the<br>
-          Valima celebration of their beloved son
-        </p>
-
-        <div class="valima-label">Hannan Shariff</div>
-
-        <div class="couple-names">
-          <span class="couple-and">with</span>
-          Afra Zoya
-        </div>
-
-        <div class="card-divider"></div>
-
-        <p class="family-label">Daughter of</p>
-        <p class="family-line">
-          Mrs. &amp; Mr. Syed Hafeez Ur Rahaman
-        </p>
-
-        <div class="card-divider"></div>
-
-        <p class="invitation-intro">
-          Your gracious presence and blessings<br>
-          will make this occasion truly special.
-        </p>
-        <div class="card-flower" style="margin-top: 25px; margin-bottom: 0;">❀</div>
-      </div>
-    </section>
-
-    <!-- Event details -->
-    <section class="details-section" id="details">
-      <div class="reveal">
-        <h2 class="details-heading">The Celebration</h2>
-        <p class="details-subheading">An evening of love, joy and blessings</p>
-      </div>
-
-      <div class="details-grid">
-        <div class="detail reveal">
-          <div class="detail-icon">✧</div>
-          <div class="detail-label">DATE</div>
-          <div class="detail-value">
-            Wednesday<br>
-            16 December 2026
-          </div>
-        </div>
-
-        <div class="detail reveal">
-          <div class="detail-icon">◷</div>
-          <div class="detail-label">TIME</div>
-          <div class="detail-value">8:00 PM<br>Onwards</div>
-        </div>
-
-        <div class="detail reveal">
-          <div class="detail-icon">⌖</div>
-          <div class="detail-label">VENUE</div>
-          <div class="detail-value">Azal Farms</div>
-          <div class="venue-address">Azal Farms, Bengaluru</div>
-        </div>
-      </div>
-
-      <a
-        class="map-button"
-        href="https://www.google.com/maps/search/?api=1&query=Azal+Farms+Bengaluru"
-        target="_blank"
-        rel="noopener noreferrer"
-      >View Location ↗</a>
-
-      <a
-        class="calendar-button"
-        href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Valima%20-%20Hannan%20Shariff%20%26%20Afra%20Zoya&dates=20261216T143000Z/20261216T173000Z&details=Valima%20celebration%20of%20Hannan%20Shariff%20and%20Afra%20Zoya.&location=Azal%20Farms%2C%20Bengaluru"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Add to Calendar +</a>
-    </section>
-
-    <!-- Countdown -->
-    <section class="countdown-section">
-      <div class="reveal">
-        <h2 class="countdown-title">Counting Down to the Celebration</h2>
-        <p class="countdown-caption">Until a beautiful evening, Insha Allah</p>
-
-        <div class="countdown" id="countdown">
-          <div class="count-item">
-            <span class="count-number" id="days">00</span>
-            <span class="count-label">Days</span>
-          </div>
-          <div class="count-item">
-            <span class="count-number" id="hours">00</span>
-            <span class="count-label">Hours</span>
-          </div>
-          <div class="count-item">
-            <span class="count-number" id="minutes">00</span>
-            <span class="count-label">Minutes</span>
-          </div>
-          <div class="count-item">
-            <span class="count-number" id="seconds">00</span>
-            <span class="count-label">Seconds</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Closing dua -->
-  <section class="closing">
-    <div class="reveal">
-      <div class="closing-ornament">✧ ❀ ✧</div>
-      <p class="dua">
-        “May Allah bless you, shower His blessings upon you,
-        and bring you together in goodness.”
-      </p>
-      <p class="dua-translation">
-        May Allah place barakah in this union, fill their home with
-        mercy and tranquillity, and grant them a lifetime of love,
-        faith and happiness. Ameen.
-      </p>
-      <div class="closing-names">Hannan &amp; Afra</div>
-    </div>
-  </section>
-
-  <footer class="footer">
-    WITH LOVE AND DUAS · ALHAMDULILLAH
-  </footer>
-
-  <!-- Upload nasheed.mp3 to the same repository for music playback -->
-  <audio id="nasheed" src="nasheed.mp3" preload="none" loop></audio>
-
-  <button
-    class="music-button"
-    id="musicButton"
-    type="button"
-    aria-label="Play nasheed"
-    title="Play or pause nasheed"
-  >♫</button>
-
-  <script>
-    const doorScreen = document.getElementById("doorScreen");
-    const openButton = document.getElementById("openButton");
-    const nasheed = document.getElementById("nasheed");
-    const musicButton = document.getElementById("musicButton");
-    const petalLayer = document.getElementById("petal-layer");
-
-    let invitationOpened = false;
-    let musicPlaying = false;
-    let petalTimer = null;
-
-    // Gentle door-opening sound created by the browser.
-    // No separate sound file is needed.
-    function playDoorSound() {
-      try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-
-        const audioContext = new AudioContext();
-        const now = audioContext.currentTime;
-        const oscillator = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-
-        oscillator.type = "sine";
-        oscillator.frequency.setValueAtTime(180, now);
-        oscillator.frequency.exponentialRampToValueAtTime(95, now + 0.65);
-
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(0.055, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.75);
-
-        oscillator.connect(gain);
-        gain.connect(audioContext.destination);
-
-        oscillator.start(now);
-        oscillator.stop(now + 0.8);
-        oscillator.onended = () => audioContext.close();
-      } catch (error) {
-        // The invitation still opens if sound is unavailable.
-      }
-    }
-
-    // Plum, blush, rose-gold and ivory falling petals.
-    const petalColors = [
-      "#d7a2b5",
-      "#f0d4df",
-      "#c99a8c",
-      "#f2d8c2",
-      "#b982a6",
-      "#ead0df",
-      "#e8b9c6"
-    ];
-
-    function createPetal() {
-      if (document.hidden) return;
-
-      const petal = document.createElement("span");
-      petal.className = "petal";
-
-      const left = Math.random() * 100;
-      const duration = 7 + Math.random() * 8;
-      const size = 8 + Math.random() * 10;
-
-      petal.style.left = left + "vw";
-      petal.style.width = size + "px";
-      petal.style.height = size * 1.45 + "px";
-      petal.style.background = petalColors[
-        Math.floor(Math.random() * petalColors.length)
-      ];
-      petal.style.animationDuration = duration + "s";
-      petal.style.animationDelay = (Math.random() * 1.5) + "s";
-
-      petalLayer.appendChild(petal);
-
-      window.setTimeout(() => petal.remove(), (duration + 2) * 1000);
-    }
-
-    function startPetals() {
-      if (petalTimer) return;
-
-      for (let i = 0; i < 12; i++) {
-        window.setTimeout(createPetal, i * 180);
-      }
-
-      petalTimer = window.setInterval(createPetal, 520);
-    }
-
-    function openInvitation() {
-      if (invitationOpened) return;
-      invitationOpened = true;
-
-      playDoorSound();
-      doorScreen.classList.add("opening");
-
-      window.setTimeout(() => {
-        doorScreen.classList.add("opened");
-        document.body.style.overflowX = "hidden";
-        startPetals();
-
-        // Attempt to start music after the visitor opens the doors.
-        // Browsers may still require the visitor to press the music button.
-        nasheed.play().then(() => {
-          musicPlaying = true;
-          musicButton.textContent = "♫";
-          musicButton.setAttribute("aria-label", "Pause nasheed");
-        }).catch(() => {
-          musicPlaying = false;
-          musicButton.textContent = "♫";
-          musicButton.setAttribute("aria-label", "Play nasheed");
-        });
-      }, 1450);
-    }
-
-    openButton.addEventListener("click", openInvitation);
-
-    // Music can also be controlled with the floating button.
-    musicButton.addEventListener("click", async () => {
-      if (musicPlaying && !nasheed.paused) {
-        nasheed.pause();
-        musicPlaying = false;
-        musicButton.textContent = "♫";
-        musicButton.setAttribute("aria-label", "Play nasheed");
-        return;
-      }
-
-      try {
-        await nasheed.play();
-        musicPlaying = true;
-        musicButton.textContent = "♫";
-        musicButton.setAttribute("aria-label", "Pause nasheed");
-      } catch (error) {
-        musicPlaying = false;
-        musicButton.setAttribute("aria-label", "Play nasheed");
-      }
-    });
-
-    // Countdown to 8 PM IST on 16 December 2026.
-    const eventDate = new Date("2026-12-16T20:00:00+05:30").getTime();
-
-    function updateCountdown() {
-      const remaining = eventDate - Date.now();
-
-      if (remaining <= 0) {
-        document.getElementById("days").textContent = "00";
-        document.getElementById("hours").textContent = "00";
-        document.getElementById("minutes").textContent = "00";
-        document.getElementById("seconds").textContent = "00";
-        return;
-      }
-
-      const days = Math.floor(remaining / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((remaining / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((remaining / (1000 * 60)) % 60);
-      const seconds = Math.floor((remaining / 1000) % 60);
-
-      document.getElementById("days").textContent = String(days).padStart(2, "0");
-      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
-      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
-      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
-    }
-
-    updateCountdown();
-    window.setInterval(updateCountdown, 1000);
-
-    // Reveal sections smoothly as they enter the screen.
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-    document.querySelectorAll(".reveal").forEach((element) => {
-      revealObserver.observe(element);
-    });
-  </script>
-</body>
-</html>
-
-
+/* ===== ELEGANT VALIMA COLOUR PALETTE ===== */
+
+:root {
+  --plum: #54213F;
+  --deep-plum: #260D25;
+  --dark-plum: #190819;
+  --mid-plum: #713653;
+
+  --rose: #B96883;
+  --blush: #F5DFE7;
+  --rose-gold: #A96858;
+  --pale-gold: #F4DFB5;
+
+  --ivory: #FFFAF3;
+  --ink: #382032;
+  --muted: #765267;
+}
+
+/* Main invitation card — rich, readable text */
+.invitation-intro,
+.family-line {
+  color: #382032;
+}
+
+.invitation-intro strong,
+.couple-names {
+  color: #54213F;
+}
+
+.small-heading,
+.family-label {
+  color: #744056;
+}
+
+.valima-label,
+.couple-and {
+  color: #A96858;
+}
+
+.card-flower {
+  color: #A96858;
+}
+
+.card-divider {
+  background: #C49A79;
+}
+
+/* Hero — clear ivory and champagne text */
+.hero h1,
+.hero-subtitle {
+  color: #FFFAF3;
+}
+
+.hero-kicker,
+.hero-bismillah,
+.hero-ampersand,
+.scroll-cue {
+  color: #F4DFB5;
+}
+
+/* Event details — high contrast on burgundy */
+.details-section {
+  background:
+    radial-gradient(
+      ellipse at center,
+      #60334F 0%,
+      #260D25 86%
+    );
+}
+
+.details-heading,
+.detail-value {
+  color: #FFFAF3;
+}
+
+.details-subheading,
+.detail-label,
+.venue-address {
+  color: #F5E3E8;
+}
+
+.detail-icon,
+.hijri-date {
+  color: #F4DFB5;
+}
+
+/* Location and calendar buttons */
+.map-button,
+.calendar-button {
+  color: #FFFAF3;
+  border-color: #D6B17A;
+  background: rgba(255, 250, 243, 0.04);
+  transition: background 0.25s, color 0.25s;
+}
+
+.map-button:hover,
+.calendar-button:hover {
+  background: #F4DFB5;
+  color: #260D25;
+}
+
+/* Countdown — dark plum on cream */
+.countdown-section {
+  background: #FFF8F0;
+}
+
+.countdown-title,
+.count-number {
+  color: #54213F;
+}
+
+.countdown-caption {
+  color: #67445C;
+}
+
+.count-label {
+  color: #744056;
+}
+
+/* Closing dua — warm, readable text */
+.closing {
+  background: linear-gradient(
+    180deg,
+    #FFF8F0 0%,
+    #F0DFE7 100%
+  );
+  color: #382032;
+}
+
+.dua {
+  color: #45233D;
+}
+
+.dua-translation {
+  color: #67445C;
+}
+
+.closing-names {
+  color: #54213F;
+}
+
+.closing-ornament {
+  color: #A96858;
+}
+
+/* Opening screen and footer */
+.open-button {
+  color: #FFFAF3;
+}
+
+.open-hint {
+  color: #F0D7E4;
+}
+
+.footer {
+  background: #260D25;
+  color: #F5DFE7;
+}
